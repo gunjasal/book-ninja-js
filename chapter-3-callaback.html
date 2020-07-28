@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success=true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li"); 
+        messageElement.textContent = message;
+        if (!success) messageElement.style.color = "#FF0000";
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition, message) {
+        if (condition) {
+          report(message, condition);
+        } else {
+          report("### FAILED: " + message, condition);
+        }
+      }
+    </script>
+    <script>
+      var text = "Domo arigato!";
+      report("Before defining functions");
+
+      function useless(ninjaCallback) {
+        report("In useless function");
+        return ninjaCallback();
+      }
+
+      function getText() {
+        report("In getText function");
+        return text;
+      }
+
+      report("Before making all the calls");
+      assert(useless(getText) === text, "The useless function works! " + text);
+      report("After the calls have been made");
+    </script>
+  </body>
+</html>
