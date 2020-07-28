@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) messageElement.style.color = "#FF0000";
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition, message) {
+        if (condition) {
+          report(message, condition);
+        } else {
+          report("### FAILED: " + message, condition);
+        }
+      }
+    </script>
+    <script>
+      // YOUR CODE HERE
+    </script>
+  </body>
+</html>
