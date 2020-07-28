@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) messageElement.style.color = "#FF0000";
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition, message) {
+        if (condition) {
+          report(message, condition);
+        } else {
+          report("### FAILED: " + message, condition);
+        }
+      }
+    </script>
+    <script>
+      var store = {
+        nextId: 1,
+        cache: {},
+        add: function (fn) {
+          if (!fn.id) {
+            fn.id = this.nextId++;
+            this.cache[fn.id] = fn;
+            return true;
+          }
+        },
+      };
+      function ninja() {}
+      assert(ninja.id === undefined, "ninja id is undefined")
+      assert(store.add(ninja), "Function was safely added.");
+      assert(ninja.id === 1, "ninja id is 1")
+      assert(!store.add(ninja), "But it was only added once.");
+    </script>
+  </body>
+</html>
