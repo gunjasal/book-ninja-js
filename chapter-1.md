@@ -1,3 +1,4 @@
+# JavaScript is everywhere
 ## 1.1 Understanding the JavaScript language
 * Functions are first-class objects - In JavaScript, functions coexist with, and can be treated like, any other JavaScript object.
 * Function closures - function is a closure when it actively maintains (“closes over”) the external variables used in its body
