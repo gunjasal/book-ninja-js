@@ -51,11 +51,10 @@ values.sort((v1,v2) => v1 - v2);
 ```
 
 ## 3.2 Fun with functions as objects
-#### 3.2.1 Storing functions
+#### 3.2.1 Storing functions - [listing 3.2](./chapter-3-listing-3.2.html)
 * allows us to easily manage related functions—for example, callbacks that have to be invoked when something of interest occurs.
-  * [listing 3.1](./chapter-3-listing-3.2.html)
 
-#### 3.2.2
+#### 3.2.2 Self-memoizing functions - [listing 3.3](./chapter-3-listing-3.3.html)
 * allows the function to remember previously computed values, thereby improving the performance of subsequent invocations.
 * This approach has two major advantages:
   * The end user enjoys performance benefits for function calls asking for a previously computed value.
