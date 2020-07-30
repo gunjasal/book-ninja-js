@@ -53,7 +53,23 @@ values.sort((v1,v2) => v1 - v2);
 ## 3.2 Fun with functions as objects
 #### 3.2.1 Storing functions
 * allows us to easily manage related functions—for example, callbacks that have to be invoked when something of interest occurs.
+  * [listing 3.1](./chapter-3-listing-3.2.html)
 
 #### 3.2.2
 * allows the function to remember previously computed values, thereby improving the performance of subsequent invocations.
-
+* This approach has two major advantages:
+  * The end user enjoys performance benefits for function calls asking for a previously computed value.
+  * It happens seamlessly and behind the scenes; neither the end user nor the page author needs to perform any special requests or do any extra initialization in order to make it all work.
+* its disadvantages may need to be weighed against its advantages:
+  * Any sort of caching will certainly sacrifice memory in favor of performance.
+  * Purists may consider that caching is a concern that shouldn’t be mixed with the business logic; a function or a method should do one thing and do it well. But
+don’t worry; in chapter 8, you’ll see how to tackle this complaint.
+  * It’s difficult to load-test or measure the performance of an algorithm such as this one, because our results depend on the previous inputs to the function.
+  
+## 3.3 Defining functions
+* JavaScript functions are usually defined by using a [function literal](https://en.wikipedia.org/wiki/Anonymous_function)
+* JavaScript provides a couple of ways to define functions, which can be divided into four groups:
+  * Function declarations and function expressions - `function myFun(){ return 1;}`
+  * Arrow functions (often called lambda functions - `myArg => myArg*2`
+  * Function constructors - `new Function('a', 'b', 'return a + b')`
+  * Generator functions - `function* myGen(){ yield 1; }`
