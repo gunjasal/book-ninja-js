@@ -46,8 +46,7 @@ Most important, in JavaScript, functions are first-class objects, or first-class
 ###### SORTING WITH A COMPARATOR
 ```
 var values = [0, 3, 2, 5, 7, 4, 8, 1];
-values.sort(function(value1, value2){ return value1 - value2;
-});
+values.sort(function(value1, value2){ return value1 - value2; });
 values.sort((v1,v2) => v1 - v2);
 ```
 
