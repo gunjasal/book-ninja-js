@@ -92,6 +92,10 @@ function ninja() {
 ```
 
 ###### FUNCTION EXPRESSIONS
+* functions that are always a part of another statement (for example, as the right side of an assignment expression, or as an argument to another function) are called function expressions.
+* function expressions are always a part of another statement.
+* or as an argument to another function call, or as a function return value
+* function declarations, the function name is mandatory, whereas for function expressions it’s completely optional.
 ```
 // number literals
 var a = 3;
@@ -101,3 +105,63 @@ myFunction(4);
 var a = function() {};
 myFunction(function(){});
 ```
+
+```
+function myFunctionDeclaration() { // declaration
+  function innerFunction() {} // declaration
+}
+
+var myFunc = function () {}; // expression
+myFunc(function() { // expression as an argument
+  return function() {}; // expression as an return value
+});
+
+(function namedFunctionExpression() {})(); // named expression as part of a function that will be immidiately invoked
+
++(function () {})(); // expressions that will be immidiately invoked, as arguments to unary operators
+-(function () {})();
+!(function () {})();
+~(function () {})();
+```
+
+```
+// function expression invocation
+var doNothing = function(){};
+doNothing();
+
+function doSomething(action) {
+  action();
+}
+```
+
+###### IMMEDIATE FUNCTIONS
+```
+// Standard function call
+myFunctionName(3);
+
+// immediate call to a function expression
+(function(){})(3); // note the parenthesis!!
+```
+
+#### 3.3.2 Arrow functions
+* fat-arrow operator
+```
+var values = [0, 3, 2, 5, 7, 4, 8, 1]; 
+values.sort(function(value1,value2){
+  return value1 – value2; 
+});
+
+values.sort((value1,value2) => value1 – value2);
+
+// simple
+var greet = name => "Greetings " + name;
+
+// block of code
+var greet = name => {
+  var helloString = 'Greetings ';
+  return helloString + name;
+};
+```
+* In this case, the return value of the arrow function behaves as in a standard function. If there’s no return statement, the result of the function invocation will be undefined, and if there is, the result will be the value of the return expression.
+
+## 3.4 Arguments and function parameters
