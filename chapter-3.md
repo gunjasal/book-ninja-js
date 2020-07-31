@@ -72,3 +72,32 @@ don’t worry; in chapter 8, you’ll see how to tackle this complaint.
   * Arrow functions (often called lambda functions - `myArg => myArg*2`
   * Function constructors - `new Function('a', 'b', 'return a + b')`
   * Generator functions - `function* myGen(){ yield 1; }`
+
+#### 3.3.1 Function declarations and function expressions
+###### FUNCTION DECLARATIONS
+```
+// function declaration
+function myFunctionName ( myFirstArg, mySecondArg ) {
+  myStatement1;
+  myStatement2;
+}
+
+// function defined within another function
+function ninja() {
+  function hiddenNinja() {
+    return "ninja here";
+  }
+  return hiddenNinja();
+}
+```
+
+###### FUNCTION EXPRESSIONS
+```
+// number literals
+var a = 3;
+myFunction(4);
+
+// function literals
+var a = function() {};
+myFunction(function(){});
+```
