@@ -196,4 +196,10 @@ function performAction(ninja, action = "skulking"){
 
 assert(performAction("Fuma") === "Fuma skulking", "The default value is used for Fuma");
 assert(performAction("Fuma", undefined) === "Fuma skulking", "The default value is used for Fuma");
+assert(performAction("Yagyu", "sneaking") === "Yagyu sneaking", "Yagyu can do whatever he pleases, even sneak!");
+
+// Referencing previous default parameters
+function performAction(ninja, action = "skulking", message = ninja + " " + action) {
+  return message;
+}
 ```
