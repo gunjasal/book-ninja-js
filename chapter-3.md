@@ -165,3 +165,35 @@ var greet = name => {
 * In this case, the return value of the arrow function behaves as in a standard function. If there’s no return statement, the result of the function invocation will be undefined, and if there is, the result will be the value of the return expression.
 
 ## 3.4 Arguments and function parameters
+* A parameter is a variable that we list as part of a function definition.
+* An argument is a value that we pass to the function when we invoke it.
+```
+function practice (ninja, weapon, technique) { ... }
+practice ("Yoshi", "sword", "shadow sword", "katana"); // Excess arguments aren’t assigned to parameters.
+practice ("Yoshi"); // undefined is assigned to parameter weapon. undefined is assigned to parameter technique.
+```
+
+#### 3.4.1 Rest parameters
+* By prefixing the last-named argument of a function with an ellipsis (...), we turn it into an array called the rest parameters, which contains the remaining passed-in arguments.
+* Only the last function parameter can be a rest parameter.
+```
+function multiMax(first, ...remainingNumbers){ ...
+}
+```
+
+#### 3.4.2 Default parameters
+```
+// Tackling default parameters before ES6
+function performAction(ninja, action){
+  action = typeof action === "undefined" ? "skulking" : action;
+  return ninja + " " + action;
+}
+
+// default parameters
+function performAction(ninja, action = "skulking"){
+   return ninja + " " + action;
+}
+
+assert(performAction("Fuma") === "Fuma skulking", "The default value is used for Fuma");
+assert(performAction("Fuma", undefined) === "Fuma skulking", "The default value is used for Fuma");
+```
