@@ -113,6 +113,9 @@ assert(ninja2.skulk() === ninja2, "The 2nd ninja is skulking");
   2. This object is passed to the constructor as the this parameter, and thus becomes the constructor’s function context.
   3. The newly constructed object is returned as the new operator’s value (with an exception that we’ll get to in short order).
 
+###### CONSTRUCTOR RETURN VALUES
+* 
+
 ## 
 ####
 ######
