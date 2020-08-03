@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) {
+          messageElement.style.color = "#FF0000";
+        }
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition = false, message) {
+        // false if condition undefined
+        if (condition) {
+          report(message, condition);
+        } else {
+          report(`${message} => FAILED`, condition);
+        }
+      }
+
+      function printObject(object) {
+        if (object == undefined) return "{}";
+
+        // for (x in object) {
+        //   answers += x + ": " + object[x] + " ";
+        // }
+
+        // for (const [key, value] of Object.entries(object)) {
+        //   result += `${key}: ${value}`;
+        // }
+
+        var result = Object.entries(object)
+          .map((entry) => entry.join(": "))
+          .join(", ");
+        return `{${result}}`;
+      }
+    </script>
+    <script>
+      function whatever(a, b, c) {
+        assert(a === 1, "The value of a is 1");
+        assert(b === 2, "The value of b is 2");
+        assert(c === 3, "The value of c is 3");
+        assert(arguments.length === 5, "We’ve passed in 5 parameters");
+        assert(arguments[0] === a, "The first argument is assigned to a");
+        assert(arguments[1] === b, "The second argument is assigned to b");
+        assert(arguments[2] === c, "The third argument is assigned to c");
+        assert(arguments[3] === 4, "We can access the fourth argument");
+        assert(arguments[4] === 5, "We can access the fifth argument");
+      }
+
+      whatever(1,2,3,4,5);
+    </script>
+  </body>
+</html>
