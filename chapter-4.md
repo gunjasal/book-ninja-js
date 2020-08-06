@@ -156,6 +156,7 @@ assert(emperor.rules === false, "The puppet does not know how to rule!"); // !!!
 
 ###### CODING CONSIDERATIONS FOR CONSTRUCTORS
 * The intent of constructors is to initialize the new object that will be created by the function invocation to initial conditions. 
+* Constructors are usually named as a noun that describes the object that’s being constructed and start with an uppercase character
 ```
 function Ninja() { 
   this.skulk = function() { // skulk property would be created on window in nonstrict mode—not a particularly useful operation
@@ -164,7 +165,43 @@ function Ninja() {
 }
 var whatever = Ninja();
 ```
-## 
+
+#### 4.2.4 Invocation with the apply and call methods
+* if we had called the function via button.click(), the context would have been the button
+* But in this example, **the event-handling system of the browser defines the context of the invocation to be the target element of the event, which causes the context to be the &lt;button&gt; element, not the button object.**
+```
+// Listing 4.10 Binding a specific context to a function
+<button id="test">Click Me!</button>
+<script>
+  function Button(id) {
+    this.id = id;
+    this.clicked = false;
+    this.click = function () {
+      this.clicked = true;
+      report("this = " + this);
+      report("button = " + button);
+      report("print button = " + printObject(button));
+      assert(button.clicked, "The button has been clicked");
+    };
+  }
+
+  var button = new Button(1);
+  assert(button.id === 1, "button's id is 1");
+  report("button = " + button);
+  report("print button = " + printObject(button));
+  report("init finished. -------------------");
+
+  var elem = document.getElementById("test");
+  elem.addEventListener("click", button.click);
+</script>
+```
+
+###### USING THE APPLY AND CALL METHODS
+* JavaScript provides a means for us to invoke a function and to explicitly specify any object we want as the function context. `apply and call`
+* As first-class objects (created, by the way, by the built-in Function constructor), functions can have properties just like any other object type, including methods.
+
+
+##
 ####
 ######
 
