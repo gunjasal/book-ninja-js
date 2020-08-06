@@ -107,6 +107,8 @@ var ninja2 = new Ninja();
 
 assert(ninja1.skulk() === ninja1, "The 1st ninja is skulking"); 
 assert(ninja2.skulk() === ninja2, "The 2nd ninja is skulking");
+report(typeof ninja1 === "object"); // true
+report("ninja1 = " + printObject(ninja1)); // ninja = {skulk: function () { return this; }}
 ```
 * Calling a function with the keyword new triggers the following steps:
   1. A new empty object is created.
@@ -114,8 +116,54 @@ assert(ninja2.skulk() === ninja2, "The 2nd ninja is skulking");
   3. The newly constructed object is returned as the new operator’s value (with an exception that we’ll get to in short order).
 
 ###### CONSTRUCTOR RETURN VALUES
-* 
+* If the constructor returns an object, that object is returned as the value of the whole new expression, and the newly constructed object passed as this to the constructor is discarded.
+* If, however, a nonobject is returned from the constructor, the returned value is ignored, and the newly created object is returned.
+```
+// Listing 4.8 Constructors returning primitive values
+function Ninja() {
+  this.skulk = function () {
+    return true;
+  };
 
+  return 1;
+}
+
+assert(Ninja() === 1, "Return value honored when not called as a constructor");
+
+var ninja = new Ninja();
+
+assert(typeof ninja === "object", "Object returned when called as a constructor");
+assert(typeof ninja.skulk === "function", "ninja object has a skulk method");
+report("ninja = " + printObject(ninja)); // ninja = {skulk: function () { return true; }}
+report("ninja.skulk() = " + ninja.skulk()); // ninja.skulk() = true
+```
+
+```
+// Listing 4.9 Constructors explicitly returning object values
+var puppet = {
+  rules: false,
+};
+
+function Emperor() {
+  this.rules = true;
+  return puppet;
+}
+
+var emperor = new Emperor();
+assert(emperor === puppet, "The emperor is merely a puppet!"); // !!!!
+assert(emperor.rules === false, "The puppet does not know how to rule!"); // !!!!
+```
+
+###### CODING CONSIDERATIONS FOR CONSTRUCTORS
+* The intent of constructors is to initialize the new object that will be created by the function invocation to initial conditions. 
+```
+function Ninja() { 
+  this.skulk = function() { // skulk property would be created on window in nonstrict mode—not a particularly useful operation
+    return this;
+  };
+}
+var whatever = Ninja();
+```
 ## 
 ####
 ######
