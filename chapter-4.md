@@ -169,6 +169,7 @@ var whatever = Ninja();
 #### 4.2.4 Invocation with the apply and call methods
 * if we had called the function via button.click(), the context would have been the button
 * But in this example, **the event-handling system of the browser defines the context of the invocation to be the target element of the event, which causes the context to be the &lt;button&gt; element, not the button object.**
+* [`apply` on addEventListner method](https://stackoverflow.com/questions/2891096/addeventlistener-using-apply)
 ```
 // Listing 4.10 Binding a specific context to a function
 <button id="test">Click Me!</button>
@@ -199,12 +200,83 @@ var whatever = Ninja();
 ###### USING THE APPLY AND CALL METHODS
 * JavaScript provides a means for us to invoke a function and to explicitly specify any object we want as the function context. `apply and call`
 * As first-class objects (created, by the way, by the built-in Function constructor), functions can have properties just like any other object type, including methods.
+```
+// Listing 4.11 Using the apply and call methods to supply the function context
+function juggle() {
+  var result = 0;
+  for (var n = 0; n < arguments.length; n++) {
+    result += arguments[n];
+  }
+  this.result = result;
+}
 
+var ninja1 = {};
+var ninja2 = {};
+juggle.apply(ninja1, [1, 2, 3, 4]);
+juggle.call(ninja2, 5, 6, 7, 8);
 
-##
-####
-######
+assert(ninja1.result === 10, "juggled via apply");
+assert(ninja2.result === 26, "juggled via call");
+```
 
-## 
-####
-######
+###### FORCING THE FUNCTION CONTEXT IN CALLBACKS
+```
+// Listing 4.12 Building a forEach function to demonstrate setting a function context
+function forEach(list, callback) {
+  for (var n = 0; n < list.length; n++) {
+    callback.call(list[n], n);
+  }
+}
+
+var weapons = [
+  { type: "shuriken" },
+  { type: "katana" },
+  { type: "nunchucks" },
+];
+
+forEach(weapons, function (index) {
+  assert(
+    this === weapons[index],
+    "Got the expected value of " + weapons[index].type
+  );
+});
+```
+
+## 4.3 Fixing the problem of function contexts
+#### 4.3.1 Using arrow functions to get around function contexts
+* arrow functions don’t get their own implicit this parameter when we call them; instead they remember the value of the this parameter at the time they were created.
+* In our case, the click arrow function was created inside a constructor function, where the `this` parameter is the newly constructed object, so whenever we (or the browser) call the click function, the value of the this parame- ter will always be bound to the newly constructed button object.
+```
+// Figure 4.6 Arrow functions don't have their own context. 
+// Instead, the context is inherited from the function in which they’re defined. 
+// The this parameter in our arrow function callback refers to the button object.
+
+function Button(){
+  this.clicked = false; 
+  this.click = () => {
+    this.clicked = true;
+    assert(button.clicked, "The button has been clicked");
+  };
+}  
+```
+###### CAVEAT: ARROW FUNCTIONS AND OBJECT LITERALS
+* Figure 4.7 If an arrow function is defined within an object literal that’s defined in global code, the value of the this param- eter associated with the arrow function is the global window object.
+```
+<button id="test">Click Me!</button>
+<script>
+  assert(this === window, "this === window");
+
+  var button = {
+    clicked: false,
+    click: () => {
+      this.clicked = true;
+      assert(button.clicked, "The button has been clicked");
+      assert(this === window, "In arrow function this === window");
+      assert(window.clicked, "Clicked is stored in window");
+    },
+  };
+
+  var elem = document.getElementById("test");
+  elem.addEventListener("click", button.click);
+</script>
+```
