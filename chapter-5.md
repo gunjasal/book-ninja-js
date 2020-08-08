@@ -38,7 +38,29 @@ later();
 
 ## 5.2 Putting closures to work
 #### 5.2.1 Mimicking private variables
-* JavaScript doesn’t have native support for private variables. But by using a closure, we can achieve an accept- able approximation
+* JavaScript **doesn’t have native support for private variables**. But by using a closure, we can achieve an acceptable approximation
+  * There're only [function variable and global variable](https://www.w3schools.com/js/js_scope.asp)
+```
+// Listing 5.3 Using closures to approximate private variables
+function Ninja() {
+  var feints = 0; // <-> this.feints = 0;
+  this.getFeints = function () {
+    return feints;
+  };
+  this.feint = function () {
+    feints++;
+  };
+}
+
+var ninja1 = new Ninja();
+ninja1.feint();
+assert(ninja1.feints === undefined, "And the private data is inaccessable to us");
+assert(ninja1.getFeints() === 1, "We're able to access the internal feint count");
+
+var ninja2 = new Ninja();
+assert(ninja2.getFeints() === 0, "The second ninja object gets its own feints variable.");
+```
+* recall that when using the new keyword on a function, a new object instance is created, and the function is called with that new object as its context, to serve as a constructor to that object. So this within the function refers to a newly instantiated object.
 
 ######
 
