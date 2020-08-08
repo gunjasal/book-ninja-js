@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) {
+          messageElement.style.color = "#FF0000";
+        }
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition = false, message) {
+        // false if condition undefined
+        if (condition) {
+          report(message, condition);
+        } else {
+          report(`${message} => FAILED`, condition);
+        }
+      }
+
+      function printObject(object) {
+        if (object == undefined) return "{}";
+
+        // for (x in object) {
+        //   answers += x + ": " + object[x] + " ";
+        // }
+
+        // for (const [key, value] of Object.entries(object)) {
+        //   result += `${key}: ${value}`;
+        // }
+
+        var result = Object.entries(object)
+          .map((entry) => entry.join(": "))
+          .join(", ");
+        return `{${result}}`;
+      }
+    </script>
+    <script>
+      function Ninja() {
+        this.skulk = function () {
+          return true;
+        };
+
+        return 123;
+      }
+
+      ninjaFunctionItself = Ninja;
+      report("ninjaFunctionItself -> " + ninjaFunctionItself);
+
+      ninjaFunctionCall = Ninja();
+      report("ninjaFunctionCall -> " + ninjaFunctionCall);
+
+      ninjaConstructor = new Ninja();
+      console.log("ninjaConstructor -> ", ninjaConstructor);
+      report("ninjaConstructor -> " + ninjaConstructor);
+      report("printObject(ninjaConstructor) -> " + printObject(ninjaConstructor));
+    </script>
+  </body>
+</html>
