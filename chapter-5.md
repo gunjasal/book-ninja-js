@@ -21,15 +21,25 @@ function outerFunction(){
   var innerValue = "ninja";
   
   function innerFunction(){
-    assert(outerValue === "samurai", "I can see the samurai."); assert(innerValue === "ninja", "I can see the ninja.")
+    assert(outerValue === "samurai", "I can see the samurai.");
+    assert(innerValue === "ninja", "I can see the ninja.")
   }
-  later = innerFunction;
+  later = innerFunction; // Stores a reference to innerFunction in the later variable.
 }
 
 outerFunction();
 later();
 ```
-####
+* When we declare innerFunction inside the outer function, not only is the function declaration defined, but a closure is created that encompasses the function definition as well as all variables in scope at the point of function definition. 
+* When innerFunction eventually executes, even if it’s executed after the scope in which it was declared goes away, it has access to the original scope in which it was declared through its closure
+* Closures create a “safety bubble” of the function and the variables in scope at the point of the function’s definition, so that the function has all it needs to execute.
+* Although all this structure isn’t readily visible (there’s no “closure” object holding all of this information that you can inspect), storing and refer- encing information in this way has a direct cost.
+* All that information needs to be held in memory until it’s absolutely clear to the JavaScript engine that it’s no longer needed (and is safe to garbage-collect), or until the page unloads.
+
+## 5.2 Putting closures to work
+#### 5.2.1 Mimicking private variables
+* JavaScript doesn’t have native support for private variables. But by using a closure, we can achieve an accept- able approximation
+
 ######
 
 ##
