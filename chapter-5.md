@@ -62,7 +62,8 @@ assert(ninja2.getFeints() === 0, "The second ninja object gets its own feints va
 ```
 * recall that when using the new keyword on a function, a new object instance is created, and the function is called with that new object as its context, to serve as a constructor to that object. So this within the function refers to a newly instantiated object.
 
-######
+#### 5.2.2 Using closures with callbacks
+
 
 ##
 ####
