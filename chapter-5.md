@@ -32,7 +32,7 @@ later();
 ```
 * When we declare innerFunction inside the outer function, not only is the function declaration defined, but a closure is created that encompasses the function definition as well as all variables in scope at the point of function definition. 
 * When innerFunction eventually executes, even if it’s executed after the scope in which it was declared goes away, it has access to the original scope in which it was declared through its closure
-* Closures create a “safety bubble” of the function and the variables in scope at the point of the function’s definition, so that the function has all it needs to execute.
+* Closures create a “safety bubble” of the function and the variables in scope _at the point of the function’s definition_, so that the function has all it needs to execute.
 * Although all this structure isn’t readily visible (there’s no “closure” object holding all of this information that you can inspect), storing and refer- encing information in this way has a direct cost.
 * All that information needs to be held in memory until it’s absolutely clear to the JavaScript engine that it’s no longer needed (and is safe to garbage-collect), or until the page unloads.
 
@@ -63,9 +63,38 @@ assert(ninja2.getFeints() === 0, "The second ninja object gets its own feints va
 * recall that when using the new keyword on a function, a new object instance is created, and the function is called with that new object as its context, to serve as a constructor to that object. So this within the function refers to a newly instantiated object.
 
 #### 5.2.2 Using closures with callbacks
+* [Listing 5.4](https://github.com/gunjasal/book-ninja-js/blob/master/chapter-5-listing-5.4.html) If we keep the variables in the global scope, we need a set of three variables for each animation.
+* By defining the variables inside the function, and by relying on closures to make them available to the timer callback invocations, each animation gets its own private “bubble” of variables,
 
+## 5.3 Tracking code execution with execution contexts
+* there are two main types of JavaScript code: global code, placed outside all functions, and function code, contained in functions. 
+* When our code is being executed by the JavaScript engine, each statement is executed in a certain execution context.
+* And just as we have two types of code, we have two types of execution contexts: 
+  * a global execution context
+  * a function execution context. 
+* There’s only **one** global execution context, created when our JavaScript program starts executing, whereas a new function execution context is created on **each function invocation.**
+  * **function context** is the object on which our function is invoked, which can be accessed through the _this_ keyword.
+  * An **execution context** is a completely different thing. It’s an internal JavaScript concept that the JavaScript engine uses to track the execution of our functions.
+* JavaScript is based on a single-threaded execution model: Only one piece of code can be executed at a time. 
+  * Every time a function is invoked, the current execution context has to be stopped, and a new function execu- tion context, in which the function code will be evaluated, has to be created.
+  * So there’s a need to keep track of all these execu- tion contexts—both the one that’s executing and the ones that are patiently waiting.
+  * The easiest way to do this is by using a stack, called the execution context stack (or often called a call stack).
+```
+// Listing 5.5 The creation of execution contexts
+function skulk(ninja) {
+  report(ninja + " skulking");
+}
+function report(message) {
+  console.log(message);
+}
 
-##
+skulk("Kuma");
+skulk("Yoshi");
+```
+* Even though the execution context stack is an internal JavaScript concept, you can explore it in any JavaScript debugger, where it’s referred to as a call stack. Figure 5.7 shows the call stack in Chrome DevTools.
+
+## 5.4 Keeping track of identifiers with lexical environments
+
 ####
 ######
 
