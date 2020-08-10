@@ -94,7 +94,7 @@ skulk("Yoshi");
 * Even though the execution context stack is an internal JavaScript concept, you can explore it in any JavaScript debugger, where it’s referred to as a call stack. Figure 5.7 shows the call stack in Chrome DevTools.
 
 ## 5.4 Keeping track of identifiers with lexical environments
-
+* A **lexical environment** is an internal JavaScript engine construct used to keep track of the mapping from identifiers to specific variables. 
 ####
 ######
 
