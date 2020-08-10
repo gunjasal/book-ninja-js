@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <style>
+    .box1 {
+      position: absolute;
+      height: 50px;
+      width: 100px;
+      margin: 0;
+      padding: 0;
+      background-color: #ccbbcc;
+    }
+
+    .box2 {
+      position: absolute;
+      height: 50px;
+      width: 100px;
+      margin: 0;
+      padding: 0;
+      background-color: #fdff7c;
+      left: 200px;
+    }
+  </style>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) {
+          messageElement.style.color = "#FF0000";
+        }
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition = false, message) {
+        // false if condition undefined
+        if (condition) {
+          report(message, condition);
+        } else {
+          report(`${message} => FAILED`, condition);
+        }
+      }
+
+      function printObject(object) {
+        if (object == undefined) return "{}";
+
+        // for (x in object) {
+        //   answers += x + ": " + object[x] + " ";
+        // }
+
+        // for (const [key, value] of Object.entries(object)) {
+        //   result += `${key}: ${value}`;
+        // }
+
+        var result = Object.entries(object)
+          .map((entry) => entry.join(": "))
+          .join(", ");
+        return `{${result}}`;
+      }
+    </script>
+
+    <div id="box1" class="box1">First Box</div>
+    <div id="box2" class="box2">Second Box</div>
+    <script>
+      function animateIt(elementId, offset) {
+        var elem = document.getElementById(elementId);
+        var tick = 0;
+        var timer = setInterval(function () {
+          if (tick < 200) {
+            elem.style.left = elem.style.top = (offset + tick) + "px";
+            tick++;
+          } else {
+            clearInterval(timer);
+            assert(tick === 200, `${elem.id} Tick accessed via a closure.`);
+            assert(elem, `${elem.id} Element also accessed via a closure.`);
+            assert(timer, `${elem.id} Timer reference also obtained via a closure.`);
+          }
+
+          elem.textContent = `${elem.style.left}:${elem.style.top}`;
+        }, 10);
+      }
+      animateIt("box1", 0);
+      animateIt("box2", 100);
+    </script>
+  </body>
+</html>
