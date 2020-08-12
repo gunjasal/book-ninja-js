@@ -187,6 +187,27 @@ thirdConst.push("Yoshi");
   );
 </script>
 ```
+* The global environment in which the globalNinja variable is registered (because this is the closest function or global lexical environment)
+* The reportActivity environment, created on the reportActivity function invocation, which contains the functionActivity, i, and forMessage variables, because they’re defined with the keyword var, and this is their closest function environment
+* The for block environment, which is empty, because var-defined variables ignore blocks (even when contained within them)
+
+###### USING LET AND CONST TO SPECIFY BLOCK-SCOPED VARIABLES
+* We can use let and const to define block-scoped, function-scoped, and global-scoped variables.
+
+#### 5.5.3 Registering identifiers within lexical environments
+* you already know that JavaScript code is executed line by line, in a straightforward fashion.
+* JavaScript isn’t too picky about where we define our functions. We can choose to place function declarations before or even after their respective calls.
+```
+const firstRonin = "Kiyokawa";
+check(firstRonin); // <------------ called before declaration
+function check(ronin) {
+  assert(ronin === "Kiyokawa", "The ronin was checked! ");
+}
+```
+###### THE PROCESS OF REGISTERING IDENTIFIERS
+* It turns out that the JavaScript engine “cheats” a little, and that execution of JavaScript code occurs in two phases.
+  * The first phase is activated whenever a new lexical environment is created. In this phase, the code isn’t executed, but the JavaScript engine visits and registers all declared variables and functions within the current lexical environment.
+  * The second phase, JavaScript execution, starts after this has been accomplished; 
 
 ##
 ####
