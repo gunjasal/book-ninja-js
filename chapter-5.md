@@ -95,12 +95,98 @@ skulk("Yoshi");
 
 ## 5.4 Keeping track of identifiers with lexical environments
 * A **lexical environment** is an internal JavaScript engine construct used to keep track of the mapping from identifiers to specific variables. 
-####
-######
+* Lexical environments are an internal implementation of the JavaScript scoping mechanism, and people often colloquially refer to them as **scopes**.
+* In pre-ES6 versions of JavaScript, a lexical environment could be associated with only a function.
 
-##
-####
-######
+#### 5.4.1 Code nesting
+* Lexical environments are heavily based on code nesting, which enables one code struc- ture to be contained within another.
+```
+// Figure 5.8
+<script>
+  var ninja = "Muneyoshi";
+  function skulk() { // The skulk function is contained within global code.
+    var action = "skulking";
+    
+    function report() { // The report function is nested within the skulk function.
+      var reportNum = 3;
+        
+      for(var i = 0; i < reportNum; i++) { // The for loop is nested within the report function.
+        console.log(ninja + " " + action + " " + i);
+      }
+    }
+    report();
+  }
+  skulk();
+</script>
+```
+* In terms of scopes, each of these code structures gets an associated lexical environ- ment every time the code is evaluated.
+
+#### 5.4.2 Code nesting and lexical environments
+* In addition to keeping track of local variables, function declarations, and function parameters, 
+  * each lexical environment has to keep track of its outer (parent) lexical envi- ronment.
+* Whenever a function is created, a reference to the lexical environment in which the function was created is stored in an internal (meaning that you can’t access or manipulate it directly) property named [[Environment]];
+```
+// Figure 5.9
+<script>
+  var ninja = "Muneyoshi";
+  function skulk() {
+    var action = "Skulking";
+    function report() {
+      var intro = "Aha!";
+      assert(intro === "Aha!", "Local");
+      assert(action === "Skulking", "Outer");
+      assert(ninja === "Muneyoshi", "Global");
+    }
+    report();
+  }
+  skulk();
+</script>
+```
+![Figure 5.9](./figure-5.9.png)
+
+## 5.5 Understanding types of JavaScript variables
+#### 5.5.1 Variable mutability
+* All variables defined with const are immutable
+  * On the other hand, vari- ables defined with keywords var and let are typical run-of-the-mill variables
+```
+// Listing 5.6 The behavior of const variables
+const firstConst = "samurai";
+firstConst = "ninja"; // Uncaught TypeError: Assignment to constant variable.
+
+// We can’t assign a completely new object to the secondConst variable, 
+// but there’s nothing stopping us from modifying the one we already have.
+const secondConst = {};
+secondConst.weapon = "wakizashi"; 
+
+// The exact same thing holds for arrays.
+const thirdConst = [];
+thirdConst.push("Yoshi"); 
+```
+#### 5.5.2 Variable definition keywords and lexical environments
+* When we use the var keyword, the variable is defined in the closest function or global lexical environment. (Note that blocks are ignored!) 
+```
+// 5.7 Using the var keyword
+<script>
+  var globalNinja = "Yoshi";
+  function reportActivity() {
+    var functionActivity = "jumping";
+    for (var i = 1; i < 3; i++) {
+      var forMessage = globalNinja + " " + functionActivity;
+      assert(forMessage === "Yoshi jumping", "Yoshi is jumping within the for block");
+      assert(i, "Current loop counter:" + i);
+    }
+
+    // But the variables of the for loop are also accessible outside the for loop.
+    assert(i === 3 && forMessage === "Yoshi jumping", "Loop variables accessible outside of the loop");
+  }
+  reportActivity();
+  assert(
+    typeof functionActivity === "undefined" &&
+      typeof i === "undefined" && typeof forMessage === "undefined", 
+      "We cannot see function variables outside of a function"
+  );
+</script>
+```
 
 ##
 ####
