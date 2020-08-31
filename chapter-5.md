@@ -249,7 +249,23 @@ assert(typeof fun === "number", "Still a number"); // fun still refers to a numb
 
 ## 5.6 Exploring how closures work
 #### 5.6.1 Revisiting mimicking private variables with closures
-
+* Figure 5.15: Private variables are realized as closures that are created by object methods defined in the constructor.
+```
+function Ninja() {
+  var feints = 0; 
+  this.getFeints = function () {
+    return feints;
+  };
+  this.feint = function () {
+    feints++;
+  };
+}
+var ninja1 = new Ninja();
+```
+  1. When the keyword new is used, a new object is instantiated.
+  2. When the constructor function is entered, a new lexical environment is created. It keeps track of all local variables created in this scope. In this case, it keeps a reference to the feints variable.
+  3. During the execution of the constructor, two functions are created and assigned as properties of the newly created object (getFeints and feint). As with any function, these two functions keep a reference to the environment in which they were created (the Ninja environment).
+![Figure 5.16](./figure-5.16.png)
 ######
 
 ##
