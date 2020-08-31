@@ -280,4 +280,4 @@ assert(imposter.getFeints() === 1, "The imposter has access to the feints variab
 ```
 
 #### 5.6.3 Revisiting the closures and callbacks example
-
+...
