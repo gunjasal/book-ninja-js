@@ -1,13 +1,13 @@
 # Functions for the journeyman: understanding function invocation
 ## 4.1 Using implicit function parameters
 * in addition to the parameters that we’ve explicitly stated in the function definition, function invocations are usually passed two implicit parameters: **arguments and this.**
-#### 4.1.1 The arguments parameter - [listing-4.1.html](https://github.com/gunjasal/book-ninja-js/blob/master/chapter-4-listing-4.1.html)
+#### 4.1.1 The arguments parameter - [listing-4.1.html](./chapter-4-listing-4.1.html)
 * The arguments parameter is a collection of all arguments passed to a function.
 * The arguments object has a property named length that indicates the exact number of arguments.
 * The arguments parameter is not a JavaScript array, and if you try to use array methods on arguments
 * with rest parameters, the need for the arguments parameter has been greatly reduced. (The rest parameter is a real array)
 
-###### ARGUMENTS OBJECT AS AN ALIAS TO FUNCTION PARAMETERS - [listing-4.2.html](https://github.com/gunjasal/book-ninja-js/blob/master/chapter-4-listing-4.2.html)
+###### ARGUMENTS OBJECT AS AN ALIAS TO FUNCTION PARAMETERS - [listing-4.2.html](./chapter-4-listing-4.2.html)
 * If we set a new value to, for example, arguments[0], the value of the first parameter will also be changed. 
 * [javascript pass-by-value vs pass-by-reference?](https://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value)
 
