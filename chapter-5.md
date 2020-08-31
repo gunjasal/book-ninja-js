@@ -266,8 +266,18 @@ var ninja1 = new Ninja();
   2. When the constructor function is entered, a new lexical environment is created. It keeps track of all local variables created in this scope. In this case, it keeps a reference to the feints variable.
   3. During the execution of the constructor, two functions are created and assigned as properties of the newly created object (getFeints and feint). As with any function, these two functions keep a reference to the environment in which they were created (the Ninja environment).
 ![Figure 5.16](./figure-5.16.png)
-######
 
-##
-####
-######
+#### 5.6.2 Private variables caveat
+* This listing modifies the source code in a way that it assigns the ninja1.getFeints method to a completely new imposter object. 
+* Still, even though it isn’t the real thing, lots of developers find this way of hiding information useful.
+```
+// Listing 5.12 Private variables are accessed through functions, not through objects!
+var imposter = {};
+imposter.getFeints = ninja1.getFeints;
+
+// verifies that we can access the supposedly private variable of ninja1
+assert(imposter.getFeints() === 1, "The imposter has access to the feints variable!");
+```
+
+#### 5.6.3 Revisiting the closures and callbacks example
+
