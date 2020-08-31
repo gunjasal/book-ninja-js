@@ -207,7 +207,7 @@ function check(ronin) {
 ###### THE PROCESS OF REGISTERING IDENTIFIERS
 * It turns out that the JavaScript engine “cheats” a little, and that execution of JavaScript code occurs in two phases.
   * The first phase is activated whenever a new lexical environment is created. In this phase, the code isn’t executed, but the JavaScript engine visits and registers all declared variables and functions within the current lexical environment.
-  * The second phase, JavaScript execution, starts after this has been accomplished; 
+  * The second phase, JavaScript execution, starts after this has been accomplished; the exact behavior depends on the type of variable (let, var, const, function declaration) and the type of environment (global, function, or block).
 
 ##
 ####
