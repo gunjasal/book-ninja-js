@@ -13,7 +13,7 @@ try {
   //Oh no, we weren't able to get the mission details
 }
 ```
-* To solve this problem, we can rewrite it with callbacks, which will be invoked when a task finishes, without blocking the UI: ![is it really solved?](./chapter-6-callback.html)
+* To solve this problem, we can rewrite it with callbacks, which will be invoked when a task finishes, without blocking the UI: [is it really solved?](./chapter-6-callback.html)
 ```
 // it’s messy, it adds a lot of boilerplate error-handling code, and it’s plain ugly. 
 getJSON("ninjas.json", function (err, ninjas) {
