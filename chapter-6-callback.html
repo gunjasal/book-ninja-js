@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>callback function</title>
+  </head>
+  <body>
+    <ul id="content"></ul>
+    <script>
+      function report(message, success = true) {
+        if (success) {
+          console.log(message);
+        } else {
+          console.error(message);
+        }
+
+        var messageElement = document.createElement("li");
+        messageElement.textContent = message;
+        if (!success) messageElement.style.color = "#FF0000";
+        document.getElementById("content").appendChild(messageElement);
+      }
+
+      function assert(condition, message) {
+        if (condition) {
+          report(message, condition);
+        } else {
+          report("### FAILED: " + message, condition);
+        }
+      }
+    </script>
+    <script>
+      getJSON("ninjas.json", function (err, ninjas) {
+        getJSON("ninjas[0].missionsUrl", function (err, missions) {
+          getJSON("missions[0].detailsUrl", function (err, missionDetails) {
+            //Study the intel plan
+          });
+        });
+      });
+
+      // var ninjas = syncGetJSON("ninjas.json");
+      // var missions = syncGetJSON("ninjas[0].missionsUrl");
+      // var missionDetails = syncGetJSON("missions[0].detailsUrl"); //Study the mission description
+
+      report("this is end report");
+
+      function syncGetJSON(file) {
+        report(file + " start");
+        j = 0;
+        for (var i=0 ; i < 1000000000 ; i++) {
+          j++;
+        }
+        report(file + " end");
+      }
+
+      function getJSON(file, callback) {
+        report(file + " start");
+        j = 0;
+        for (var i=0 ; i < 1000000000 ; i++) {
+          j++;
+        }
+        report(file + " end");
+
+        callback();
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+    </script>
+  </body>
+</html>
