@@ -28,9 +28,9 @@
       }
     </script>
     <script>
-      getJSON("ninjas.json", function (err, ninjas) {
-        getJSON("ninjas[0].missionsUrl", function (err, missions) {
-          getJSON("missions[0].detailsUrl", function (err, missionDetails) {
+      getJSON("ninjas.json", function () {
+        getJSON("ninjas[0].missionsUrl", function () {
+          getJSON("missions[0].detailsUrl", function () {
             //Study the intel plan
           });
         });
