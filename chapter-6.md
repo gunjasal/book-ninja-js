@@ -38,11 +38,64 @@ getJSON("ninjas.json", function (err, ninjas) {
 
 ```
 ## 6.2 Working with generator functions
-#### 
-######
+* A generator is a function that generates a sequence of values, but not all at once, as a standard function would, but on a per request basis.
+* after a value is produced, a generator function doesn’t end its exe- cution, as a normal function would. Instead, a generator is merely suspended. Then, when a request for another value comes along, the generator resumes where it left off.
+```
+// Listing 6.1 Using a generator function to generate a sequence of values
+function* WeaponGenerator(){
+  yield "Katana";
+  yield "Wakizashi";
+  yield "Kusarigama";
+}
 
-## 
-####
+for(let weapon of WeaponGenerator()) {
+  assert(weapon !== undefined, weapon);
+}
+
+// const iter = WeaponGenerator()
+// iter.next();
+// iter.next();
+// iter.next();
+```
+
+#### 6.2.1 Controlling the generator through the iterator object
+* Making a call to a generator doesn’t mean that the body of the generator function will be executed. Instead, an iterator object is created, an object through which we can com- municate with the generator.
+
+###### ITERATING THE ITERATOR
+```
+// Listing 6.3 Iterating over generator results with a while loop
+function* WeaponGenerator() {
+  yield "Katana";
+  yield "Wakizashi";
+}
+
+const weaponsIterator = WeaponGenerator();
+let item;
+while (!(item = weaponsIterator.next()).done) {
+  assert(item !== null, item.value);
+}
+```
+###### YIELDING TO ANOTHER GENERATOR
+```
+// Listing 6.4 Using yield* to delegate to another generator
+function* WarriorGenerator() {
+  yield "Sun Tzu";
+  yield* NinjaGenerator();
+  yield "Genghis Khan";
+}
+function* NinjaGenerator() {
+  yield "Hattori";
+  yield "Yoshi";
+}
+for (let warrior of WarriorGenerator()) {
+  assert(warrior !== null, warrior);
+}
+
+// Sun Tzu, Hattori, Yoshi, Genghis Khan.
+```
+
+#### 6.2.2 Using generators
+
 ######
 
 ## 
