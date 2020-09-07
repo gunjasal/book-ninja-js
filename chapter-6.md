@@ -95,9 +95,74 @@ for (let warrior of WarriorGenerator()) {
 ```
 
 #### 6.2.2 Using generators
+###### USING GENERATORS TO GENERATE IDS
+```
+// Listing 6.5 Using generators for generating IDs
+function* IdGenerator() {
+  let id = 0;
+  while (true) {
+    yield ++id;
+  }
+}
 
-######
+const idIterator = IdGenerator();
+const ninja1 = { id: idIterator.next().value };
+const ninja2 = { id: idIterator.next().value };
+const ninja3 = { id: idIterator.next().value };
 
+assert(ninja1.id === 1, "First ninja has id 1");
+assert(ninja2.id === 2, "Second ninja has id 2");
+assert(ninja3.id === 3, "Third ninja has id 3");
+```
+* Writing infinite loops isn’t something that we generally want to do in a standard function. But with generators, everything is fine! 
+* Whenever the gen- erator encounters a yield statement, the generator execution is suspended until the next method is called again.
+
+###### USING GENERATORS TO TRAVERSE THE DOM
+```
+// Listing 6.6 Recursive DOM traversal
+<div id="subTree">
+  <form>
+    <input type="text" />
+  </form>
+  <p>Paragraph</p>
+  <span>Span</span>
+</div>
+
+<script>
+  function traverseDOM(element, callback) {
+    callback(element);
+    element = element.firstElementChild;
+    while (element) {
+      traverseDOM(element, callback);
+      element = element.nextElementSibling;
+    }
+  }
+  
+  const subTree = document.getElementById("subTree");
+  traverseDOM(subTree, function (element) {
+    assert(element !== null, element.nodeName);
+  });
+</script>
+```
+
+```
+// Listing 6.7 Iterating over a DOM tree with generators
+<script>
+  function* DomTraversal(element) {
+    yield element;
+    element = element.firstElementChild;
+    while (element) {
+      yield* DomTraversal(element);
+      element = element.nextElementSibling;
+    }
+  }
+  const subTree = document.getElementById("subTree");
+  for (let element of DomTraversal(subTree)) {
+    assert(element !== null, element.nodeName);
+  }
+</script>
+
+```
 ## 
 ####
 ######
