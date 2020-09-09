@@ -234,9 +234,79 @@ ninjaIterator.throw("Catch this!");
   * But this time there’s no `yield` expression, and instead the program encounters a return statement. This returns the value Yoshi skulk and completes the generator’s execution by moving the generator into the Completed state.
 
 ## 6.3 Working with promises
-#### 
-######
+#### 6.3.1 Understanding the problems with simple callbacks
+#### 6.3.2 Diving into promises
+* A promise is an object that serves as a placeholder for a result of an asynchronous task. 
+```
+// Listing 6.11 A closer look at promise order of execution
+report("At code start");
+var ninjaDelayedPromise = new Promise((resolve, reject) => {
+  report("ninjaDelayedPromise executor");
+  setTimeout(() => {
+    report("Resolving ninjaDelayedPromise");
+    resolve("Hattori");
+  }, 500);
+});
 
+assert(ninjaDelayedPromise !== null, "After creating ninjaDelayedPromise");
+ninjaDelayedPromise.then((ninja) => { // This callback will always be called asynchronously, regardless of the current state of the promise.
+  assert(
+    ninja === "Hattori",
+    "ninjaDelayedPromise resolve handled with Hattori"
+  );
+});
+
+const ninjaImmediatePromise = new Promise((resolve, reject) => {
+  report("ninjaImmediatePromise executor. Immediate resolve.");
+  resolve("Yoshi");
+});
+
+ninjaImmediatePromise.then((ninja) => {
+  assert(ninja === "Yoshi", "ninjaImmediatePromise resolve handled with Yoshi");
+});
+report("At code end");
+```
+
+#### 6.3.3 Rejecting promises
+#### 6.3.4 Creating our first real-world promise
+#### 6.3.5 Chaining promises
+###### CATCHING ERRORS IN CHAINED PROMISES
+#### 6.3.6 Waiting for a number of promises
+###### RACING PROMISES
+```
+// Listing 6.17 Waiting for a number of promises with Promise.all
+Promise.all([
+  getJSON("data/ninjas.json"),
+  getJSON("data/mapInfo.json"),
+  getJSON("data/plan.json"),
+])
+  .then((results) => {
+    const ninjas = results[0],
+      mapInfo = results[1],
+      plan = results[2];
+    assert(
+      ninjas !== undefined && mapInfo !== undefined && plan !== undefined,
+      "The plan is ready to be set in motion!"
+    );
+  })
+  .catch((error) => {
+    fail("A problem in carrying out our plan!");
+  });
+```
+
+```
+// Listing 6.18 Racing promises with Promise.race
+Promise.race([
+  getJSON("data/yoshi.json"),
+  getJSON("data/hattori.json"),
+  getJSON("data/hanzo.json"),
+])
+  .then((ninja) => {
+    assert(ninja !== null, ninja.name + " responded first");
+  })
+  .catch((error) => fail("Failure!"));
+
+```
 ## 
 ####
 ######
