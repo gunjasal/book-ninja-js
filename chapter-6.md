@@ -147,6 +147,13 @@ assert(ninja3.id === 3, "Third ninja has id 3");
 
 ```
 // Listing 6.7 Iterating over a DOM tree with generators
+<div id="subTree">
+  <form>
+    <input type="text"/>
+  </form>
+  <p>Paragraph</p>
+  <span>Span</span>
+</div>
 <script>
   function* DomTraversal(element) {
     yield element;
@@ -161,10 +168,73 @@ assert(ninja3.id === 3, "Third ninja has id 3");
     assert(element !== null, element.nodeName);
   }
 </script>
+```
+#### 6.2.3 Communicating with a generator
+* We can also send data to a generator, thereby achieving two-way communication! 
+
+###### SENDING VALUES AS GENERATOR FUNCTION ARGUMENTS
+* unlike standard functions, generators can even receive data after their execution has started, whenever we resume them by requesting the next value.
 
 ```
-## 
-####
+// Listing 6.8 Sending data to and receiving data from a generator
+function* NinjaGenerator(action) {
+  const imposter = yield "Hattori " + action;
+  assert(imposter === "Hanzo", "The generator has been infiltrated");
+
+  yield "Yoshi (" + imposter + ") " + action;
+}
+
+const ninjaIterator = NinjaGenerator("skulk");
+
+const result1 = ninjaIterator.next();
+assert(result1.value === "Hattori skulk", "Hattori is skulking");
+
+const result2 = ninjaIterator.next("Hanzo");
+assert(result2.value === "Yoshi (Hanzo) skulk", "We have an imposter!");
+```
+
+###### USING THE NEXT METHOD TO SEND VALUES INTO A GENERATOR
+*  This passed-in value is used by the generator as the value of the whole yield expression, in which the generator was currently suspended, as shown in figure 6.3.
+* We use yield to return data from a generator, and the iterator’s next() method to pass data back to the generator.
+
+###### THROWING EXCEPTIONS
+* This feature that enables us to throw exceptions back to generators might feel a bit strange at first. 
+* we’ll use this feature to improve asyn- chronous server-side communication.
+```
+// Listing 6.9 Throwing exceptions to generators
+function* NinjaGenerator() {
+  try {
+    yield "Hattori";
+    fail("The expected exception didn't occur");
+  } catch (e) {
+    assert(e === "Catch this!", "Aha! We caught an exception");
+  }
+}
+const ninjaIterator = NinjaGenerator();
+const result1 = ninjaIterator.next();
+assert(result1.value === "Hattori", "We got Hattori");
+ninjaIterator.throw("Catch this!");
+```
+
+#### 6.2.4 Exploring generators under the hood
+* a generator works almost like a small program, a state machine that moves between states:
+  * `Suspended start` — When the generator is created, it starts in this state. None of the generator’s code is executed.
+  * `Executing` — The state in which the code of the generator is executed. The execu- tion continues either from the beginning or from where the generator was last suspended. A generator moves to this state when the matching iterator’s next method is called, and there exists code to be executed.
+  * `Suspended yield` — During execution, when a generator reaches a yield expres- sion, it creates a new object carrying the return value, yields it, and suspends its execution. This is the state in which the generator is paused and is waiting to continue its execution.
+  * `Completed` — If during execution the generator either runs into a return state- ment or runs out of code to execute, the generator moves into this state.
+  
+###### TRACKING GENERATORS WITH EXECUTION CONTEXTS
+* Figure 6.6 gives a snapshot at two positions in the application execution. 
+* An interesting thing happens when the program execution leaves the generator, as shown in figure 6.7. Typically, when program execution returns from a standard func- tion, the matching execution context is popped from the stack and completely dis- carded. But this isn’t the case with generators.
+  * The matching NinjaGenerator stack item is popped from the stack, but it’s not dis- carded, because the ninjaIterator keeps a reference to it. You can see it as an ana- logue to closures.
+  * Generators, on the other hand, have to be able to resume their execution. Because the execution of all functions is handled by execution contexts, the iterator keeps a reference to its execution context, so that it’s alive for as long as the iterator needs it.
+* Another interesting thing happens when we call the next method on the iterator: `const result1 = ninjaIterator.next();`
+  * If this was a standard straightforward function call, this would cause the creation of a new next() execution context item, which would be placed on the stack
+  * But as you might have noticed, generators are anything but standard, and a call to the next method of an iterator behaves a lot differently. It reactivates the matching execution context, in this case, the NinjaGenerator context, and places it on top of the stack, continuing the execution where it left off, as shown in figure 6.8.
+  * But this time there’s no `yield` expression, and instead the program encounters a return statement. This returns the value Yoshi skulk and completes the generator’s execution by moving the generator into the Completed state.
+
+## 6.3 Working with promises
+#### 
 ######
 
 ## 
