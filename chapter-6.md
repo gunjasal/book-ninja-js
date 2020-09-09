@@ -307,6 +307,80 @@ Promise.race([
   .catch((error) => fail("Failure!"));
 
 ```
-## 
-####
-######
+## 6.4 Combining generators and promises
+```
+// Lisiting 6.19 Combining generators and promises
+async(function* () {
+  try {
+    const ninjas = yield getJSON("data/ninjas.json");
+    const missions = yield getJSON(ninjas[0].missionsUrl);
+    const missionDescription = yield getJSON(missions[0].detailsUrl); //Study the mission details
+  } catch (e) {
+    //Oh no, we weren't able to get the mission details
+  }
+});
+
+function async(generator) {
+  var iterator = generator();
+
+  function handle(iteratorResult) {
+    if (iteratorResult.done) {
+      return;
+    }
+
+    const iteratorValue = iteratorResult.value;
+    if (iteratorValue instanceof Promise) {
+      iteratorValue
+        .then((res) => handle(iterator.next(res)))
+        .catch((err) => iterator.throw(err));
+    }
+  }
+
+  try {
+    handle(iterator.next());
+  } catch (e) {
+    iterator.throw(e);
+  }
+}
+```
+
+```
+getJSON("data/ninjas.json", (err, ninjas) => {
+  if (err) {
+    console.log("Error fetching ninjas", err);
+    return;
+  }
+  getJSON(ninjas[0].missionsUrl, (err, missions) => {
+    if (err) {
+      console.log("Error locating ninja missions", err);
+      return;
+    }
+    console.log(misssions);
+  });
+});
+
+// vs
+
+async(function* () {
+  try {
+    const ninjas = yield getJSON("data/ninjas.json");
+    const missions = yield getJSON(ninjas[0].missionsUrl);
+    //All information recieved
+  } catch (e) {
+    //An error has occurred
+  }
+});
+
+// vs 
+
+(async function () {
+  try {
+    const ninjas = await getJSON("data/ninjas.json");
+    const missions = await getJSON(missions[0].missionsUrl);
+    console.log(missions);
+  } catch (e) {
+    console.log("Error: ", e);
+  }
+})();
+```
+#### 6.4.1 Looking forward—the async function
