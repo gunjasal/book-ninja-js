@@ -54,10 +54,19 @@ assert(!ninja2.swingSword, "But they cannot swing!");
 * Figure 7.10 All newly created instances reference the new prototype.
 
 #### 7.2.3 Object typing via constructors
+* Figure 7.11 The prototype object of each function has a constructor property that references the func- tion.
+* By using the constructor property, we can access the function that was used to create the object.
+```
+// Listing 7.6 Instantiating a new object using a reference to a constructor
+function Ninja() {}
+const ninja = new Ninja();
+const ninja2 = new ninja.constructor();
+assert(ninja2 instanceof Ninja, "It's a Ninja!");
+assert(ninja !== ninja2, "But not the same Ninja!");
+```
 
+## 7.3 Achieving inheritance
 
-
-##
 ####
 ######
 
