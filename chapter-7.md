@@ -66,9 +66,75 @@ assert(ninja !== ninja2, "But not the same Ninja!");
 ```
 
 ## 7.3 Achieving inheritance
+*  In JavaScript, inheritance works slightly differently than in other popular object-oriented languages. 
+```
+// Listing 7.8 Achieving inheritance with prototypes
+function Person() {}
+Person.prototype.dance = function () {};
 
-####
-######
+function Ninja() {}
+Ninja.prototype = new Person();
+
+const ninja = new Ninja();
+assert(
+  ninja instanceof Ninja,
+  "ninja receives functionality from the Ninja prototype"
+);
+assert(ninja instanceof Person, "... and the Person prototype");
+assert(ninja instanceof Object, "... and the Object prototype");
+```
+* The best technique for creating such a prototype chain is to use an instance of an object as the other object’s prototype:
+  * For example: `Ninja.prototype = new Person();`
+ 
+#### 7.3.1 The problem of overriding the constructor property
+* If we take a closer look at figure 7.14, we’ll see that by setting the new Person object as a prototype of the Ninja constructor, we’ve lost our connection to the Ninja construc- tor that was previously kept by the original Ninja prototype.
+  * This is a problem, because the constructor property can be used to determine the function with which the object was created.
+
+###### CONFIGURING OBJECT PROPERTIES
+* In JavaScript, every object property is described with a property descriptor through which we can configure the following keys:
+```
+// Listing 7.9 Configuring properties
+var ninja = {};
+ninja.name = "Yoshi";
+ninja.weapon = "kusarigama";
+
+Object.defineProperty(ninja, "sneaky", {
+  configurable: false,
+  enumerable: false,
+  value: true,
+  writable: true,
+});
+
+assert("sneaky" in ninja, "We can access the new property");
+for (let prop in ninja) {
+  assert(prop !== undefined, "An enumerated property: " + prop);
+}
+```
+###### FINALLY SOLVING THE PROBLEM OF OVERRIDING THE CONSTRUCTOR PROPERTY
+```
+// Listing 7.10 Fixing the constructor property problem
+function Person() {}
+Person.prototype.dance = function () {};
+
+function Ninja() {}
+Ninja.prototype = new Person();
+
+Object.defineProperty(Ninja.prototype, "constructor", {
+  enumerable: false,
+  value: Ninja,
+  writable: true,
+});
+
+const ninja = new Ninja();
+
+assert(
+  ninja.constructor === Ninja,
+  "Connection from ninja instances to Ninja constructor reestablished!"
+);
+for (let prop in Ninja.prototype) {
+  assert(prop === "dance", "The only enumerable property is dance!");
+}
+```
 
 ##
 ####
