@@ -155,7 +155,7 @@ Person {}
 > Ninja.prototype.constructor
 ƒ Person(){}
 > ninja.__proto__
-Person {}__proto__: constructor: ƒ Person()__proto__: Object
+Person {}
 > ninja.__proto__.__proto__
 {constructor: ƒ}
 > ninja.__proto__.__proto__.constructor
