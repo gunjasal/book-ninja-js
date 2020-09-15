@@ -136,6 +136,34 @@ for (let prop in Ninja.prototype) {
 }
 ```
 
-##
-####
+#### 7.3.2 The instanceof operator
+```
+// Listing 7.11 Studying the instanceof operator
+function Person() {}
+function Ninja() {}
+Ninja.prototype = new Person();
+const ninja = new Ninja();
+
+assert(ninja instanceof Ninja, "Our ninja is a Ninja!");
+assert(ninja instanceof Person, "A ninja is also a Person. ");
+```
+
+* Figure 7.16, The prototype chain of a ninja instance is composed of a new Person() object and the Person prototype.
+```
+> Ninja.prototype
+Person {}
+> Ninja.prototype.constructor
+ƒ Person(){}
+> ninja.__proto__
+Person {}__proto__: constructor: ƒ Person()__proto__: Object
+> ninja.__proto__.__proto__
+{constructor: ƒ}
+> ninja.__proto__.__proto__.constructor
+ƒ Person(){}
+> ninja.__proto__.__proto__.constructor.prototype
+{constructor: ƒ}
+> ninja.__proto__.__proto__.constructor.prototype.constructor
+ƒ Person(){}
+```
+
 ######
