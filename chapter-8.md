@@ -157,6 +157,32 @@ ninja = makeLoggable(ninja);
 assert(ninja.name === "Yoshi", "Our ninja Yoshi");
 ninja.weapon = "sword";
 ```
+#### 8.2.2 Using proxies for measuring performance
+```
+// Listing 8.10 Measuring performance with proxies
+function isPrime(number) {
+  if (number < 2) {
+    return false;
+  }
+  for (let i = 2; i < number; i++) {
+    if (number % i === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+isPrime = new Proxy(isPrime, {
+  // Provides an apply trap that will be called whenever a proxy is called as a function
+  apply: (target, thisArg, args) => { 
+    console.time("isPrime");
+    const result = target.apply(thisArg, args);
+    console.timeEnd("isPrime");
+    return result;
+  },
+});
+isPrime(1299827);
+```
 ######
 
 ##
