@@ -59,6 +59,8 @@ function Ninja() {
   });
 }
 ```
+#### 8.1.2 Using getters and setters to validate property values
+
 
 ###### 
 
