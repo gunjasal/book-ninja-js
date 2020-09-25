@@ -60,11 +60,103 @@ function Ninja() {
 }
 ```
 #### 8.1.2 Using getters and setters to validate property values
+```
+function Ninja() {
+  let _skillLevel = 0;
+  Object.defineProperty(this, "skillLevel", {
+    get: () => _skillLevel,
+    set: (value) => {
+      if (!Number.isInteger(value)) {
+        throw new TypeError("Skill level should be a number");
+      }
+      _skillLevel = value;
+    },
+  });
+}
+```
+#### 8.1.3 Using getters and setters to define computed properties
+```
+// Listing 8.6 Defining computed properties
+const shogun = {
+  name: "Yoshiaki",
+  clan: "Ashikaga",
+  get fullTitle() {
+    return this.name + " " + this.clan;
+  },
+  set fullTitle(value) {
+    const segments = value.split(" ");
+    this.name = segments[0];
+    this.clan = segments[1];
+  },
+};
+```
 
+## 8.2 Using proxies to control access
+* A proxy is a surrogate through which we control access to another object.
+* We can use proxies when we’d traditionally use getters and setters, such as for log- ging, data validation, and computed properties. 
+```
+// Listing 8.7 Creating proxies with the Proxy constructor
+const emperor = { name: "Komei" };
+const representative = new Proxy(emperor, {
+  get: (target, key) => {
+    report("Reading " + key + " through a proxy");
+    return key in target ? target[key] : "Don't bother the emperor!";
+  },
+  set: (target, key, value) => {
+    report("Writing " + key + " through a proxy");
+    target[key] = value;
+  },
+});
 
-###### 
+assert(emperor.name === "Komei", "The emperor's name is Komei");
+assert(
+  representative.name === "Komei",
+  "We can get the name property through a proxy"
+);
+assert(
+  emperor.nickname === undefined,
+  "The emperor doesn’t have a nickname "
+);
 
-####
+assert(
+  representative.nickname === "Don't bother the emperor!",
+  "The proxy jumps in when we make inproper requests"
+);
+representative.nickname = "Tenno";
+assert(emperor.nickname === "Tenno", "The emperor now has a nickname");
+assert(
+  representative.nickname === "Tenno",
+  "The nickname is also accessible through the proxy"
+);
+```
+* In this example, we’ve used the get and set traps, but many other built-in traps allow us to define handlers for various object actions 
+  * The `apply` trap will be activated when calling a function, and the `construct` trap when using the new operator.
+  * The `get` and `set` traps will be activated when reading/writing to a property.
+  * The `enumerate` trap will be activated for `for-in` statements.
+  * `getPrototypeOf` and `setPrototypeOf` will be activated for getting and setting the prototype value.
+  
+#### 8.2.1 Using proxies for logging
+```
+// Listing 8.9 Using proxies makes it easier to add logging to objects
+function makeLoggable(target) {
+  return new Proxy(target, {
+    get: (target, property) => {
+      report("Reading " + property);
+      return target[property];
+    },
+    set: (target, property, value) => {
+      report("Writing value " + value + " to " + property);
+      target[property] = value;
+    },
+  });
+}
+
+let ninja = { name: "Yoshi" };
+ninja = makeLoggable(ninja);
+
+assert(ninja.name === "Yoshi", "Our ninja Yoshi");
+ninja.weapon = "sword";
+```
 ######
 
 ##
