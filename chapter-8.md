@@ -183,16 +183,53 @@ isPrime = new Proxy(isPrime, {
 });
 isPrime(1299827);
 ```
-######
+#### 8.2.3 Using proxies to autopopulate properties
+```
+// Listing 8.11 Autopopulating properties with proxies
+function Folder() {
+  return new Proxy(
+    {},
+    {
+      get: (target, property) => {
+        report("Reading " + property);
+        if (!(property in target)) {
+          target[property] = new Folder();
+        }
+        return target[property];
+      },
+    }
+  );
+}
+const rootFolder = new Folder();
 
-##
-####
-######
+try {
+  rootFolder.ninjasDir.firstNinjaDir.ninjaFile = "yoshi.txt";
+  pass("An exception wasn’t raised");
+} catch (e) {
+  fail("An exception has occurred");
+}
+```
 
-##
-####
-######
+#### 8.2.4 Using proxies to implement negative array indexes
+```
+// Listing 8.12 Negative array indexes with proxies
+function createNegativeArrayProxy(array) {
+  if (!Array.isArray(array)) {
+    throw new TypeError("Expected an array");
+  }
+  return new Proxy(array, {
+    get: (target, index) => {
+      index = +index;
+      return target[index < 0 ? target.length + index : index];
+    },
+    set: (target, index, val) => {
+      index = +index;
+      return (target[index < 0 ? target.length + index : index] = val);
+    },
+  });
+}
+```
 
-##
-####
-######
+#### 8.2.5 Performance costs of proxies
+* The fact that all our operations have to pass in through the proxy adds a layer of indirection that enables us to implement all these cool features, but at the same time it introduces a significant amount of additional processing that impacts performance.
+* It turns out that in Chrome, proxies are around 50 times slower; in Firefox, they’re about 20 times slower.
