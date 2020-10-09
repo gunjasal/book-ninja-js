@@ -79,14 +79,31 @@ const sum = numbers.reduce((aggregated, number) => aggregated + number, 0);
 </body>
 ```
 
-##
-####
-####
-####
-######
+## 9.2 Maps
+#### 9.2.1 Don’t use objects as maps
+```
+//Listing 9.14 Objects have access to properties that weren’t explicitly defined
+const dictionary = {
+  ja: {
+    "Ninjas for hire": "レンタル用の忍者",
+  },
+  zh: {
+    "Ninjas for hire": "忍者出租",
+  },
+  ko: {
+    "Ninjas for hire": " 고용 닌자 ",
+  },
+};
+assert(
+  dictionary.ja["Ninjas for hire"] === "レンタル用の忍者",
+  "We know how to say 'Ninjas for hire' in Japanese!"
+);
+assert(
+  typeof dictionary.ja["constructor"] === "undefined",
+  dictionary.ja["constructor"] // fails -> function Object() { [native code] }
+);
+```
+* As you learned in chapter 7, all objects have prototypes; even if we define new, empty objects as our maps, they still have access to the properties of the prototype objects. One of those properties is constructor (recall that constructor is the property of the prototype object that points back to the constructor function), and it’s the culprit behind the mess we now have on our hands.
+* In addition, with objects, keys can only be string values; if you want to create a map- ping for any other value, that value will be silently converted into a string without any- one asking you anything!
 
-##
-####
-####
-####
-######
+> JUST READ TO THE END OF THE CHAPTER
