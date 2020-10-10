@@ -151,12 +151,7 @@ function getNodes(htmlString, doc, fragment) {
   // if the fragment exists, injects the nodes into it.
   if (fragment) {
     while (div.firstChild) {
-      // https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
-      //   The Node.appendChild() method adds a node to the end of the list of children of a specified parent node. 
-      //   If the given child is a reference to an existing node in the document, 
-      //   appendChild() moves it from its current position to the new position 
-      //   (there is no requirement to remove the node from its parent node before appending it to some other node).
-      fragment.appendChild(div.firstChild);
+      fragment.appendChild(div.firstChild); // https://stackoverflow.com/a/12146920
     }
   }
   return div.childNodes;
@@ -187,7 +182,7 @@ function getNodes(htmlString, doc, fragment) {
             callback.call(
               root(elems[i], first),
               // i > 0 ? fragment.cloneNode(true) : fragment // If we need to insert the nodes into more than one element, we have to clone the fragment each time
-              fragment.cloneNode(true)
+              fragment.cloneNode(true) // https://stackoverflow.com/questions/29352976/why-is-documentfragment-cleared-after-appending
             );
           }
         }
