@@ -203,16 +203,16 @@ function getNodes(htmlString, doc, fragment) {
 
 ## 12.2 Using DOM attributes and properties
 * When accessing the values of element attributes, we have two options: using the tradi- tional DOM methods of `getAttribute` and `setAttribute`, or using properties of the DOM objects that correspond to the attributes.
-```
-e.getAttribute('id') 
-e.id
-```
+  ```
+  e.getAttribute('id') 
+  e.id
+  ```
 * But don’t let this fool you into thinking that the property and attribute are sharing the same value — they aren’t. We’ll see later in this chapter that the attribute and corresponding property, although linked, aren’t always identical.
 * It’s important to note that not all attributes are represented by element properties.
 * If you’re not sure whether a property for an attribute exists, you can always test for it and fall back to the DOM methods if it doesn’t exist. Here’s an example:
-```
-const value = element.someValue ? element.someValue : element.getAttribute('someValue');
-```
+  ```
+  const value = element.someValue ? element.someValue : element.getAttribute('someValue');
+  ```
 * TIP - In HTML5, use the prefix data- for all custom attributes to keep them valid in the eye of the HTML5 specification. It’s a good convention that clearly separates custom attributes from native attributes.
 
 ## 12.3 Styling attribute headaches
