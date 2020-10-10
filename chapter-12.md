@@ -200,13 +200,60 @@ function getNodes(htmlString, doc, fragment) {
   });
 </script>
 ```
-####
-######
-######
 
-## 12.2
-####
-####
+## 12.2 Using DOM attributes and properties
+* When accessing the values of element attributes, we have two options: using the tradi- tional DOM methods of `getAttribute` and `setAttribute`, or using properties of the DOM objects that correspond to the attributes.
+```
+e.getAttribute('id') 
+e.id
+```
+* But don’t let this fool you into thinking that the property and attribute are sharing the same value — they aren’t. We’ll see later in this chapter that the attribute and corresponding property, although linked, aren’t always identical.
+* It’s important to note that not all attributes are represented by element properties.
+* If you’re not sure whether a property for an attribute exists, you can always test for it and fall back to the DOM methods if it doesn’t exist. Here’s an example:
+```
+const value = element.someValue ? element.someValue : element.getAttribute('someValue');
+```
+* TIP - In HTML5, use the prefix data- for all custom attributes to keep them valid in the eye of the HTML5 specification. It’s a good convention that clearly separates custom attributes from native attributes.
+
+## 12.3 Styling attribute headaches
+* As with the attributes and properties in the previous section, we again have two approaches for handling style values: the attribute value, and the element property created from it.
+  * The most commonly used of these is the style element property, which isn’t a string but an object that holds properties corresponding to the style values specified in the element markup.
+  * In addition, you’ll see that there’s a method for accessing the computed style information of an element, where `computed style` means the style that will be applied to the element after evaluating all inherited and applied style information.
+  
+#### 12.3.1 Where are my styles?
+* The style information located in the style property of a DOM element is initially set from the value specified for the style attribute in the element markup. 
+  * For example, style="color:red;" results in that style information being placed into the style object.
+* Many script authors are disappointed to find that no values from on-page `<style>` elements or external style sheets are available in the element’s style object.
+  * But we won’t stay disappointed for long — you’ll soon see a way to obtain this information.
+```
+// Listing 12.6 Examining the style property
+<style> // Declares an in-page style sheet that applies font size and border information
+  div {
+    font-size: 1.8em;
+    border: 0 solid gold;
+  }
+</style>
+
+<div style="color: #3d00ff" title="Ninja power!">忍者パワー</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const div = document.querySelector("div");
+    assert(
+      div.style.color === "rgb(61, 0, 255)" || div.style.color === "#3d00ff",
+      "color was recorded"
+    ); // success
+    assert(div.style.fontSize === "1.8em", "fontSize was recorded"); // fail
+    assert(div.style.borderWidth === "0", "borderWidth was recorded"); // fail
+    
+    div.style.borderWidth = "4px";
+    assert(div.style.borderWidth === "4px", "borderWidth was replaced"); // success
+  });
+</script>
+```
+* This is because the `style` object doesn’t reflect any style information inherited from CSS style sheets:
+
+#### 12.3.2 Style property naming
+
 ####
 ######
 ######
