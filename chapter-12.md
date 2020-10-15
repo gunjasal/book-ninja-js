@@ -253,8 +253,59 @@ function getNodes(htmlString, doc, fragment) {
 * This is because the `style` object doesn’t reflect any style information inherited from CSS style sheets:
 
 #### 12.3.2 Style property naming
+* CSS attributes cause relatively few cross-browser difficulties when it comes to accessing the values provided by the browser. 
+  * But differences between how CSS names styles and how we access those in script do exist, and some style names differ across browsers.
+* multiword CSS style names are converted to camel case when used as a property name.
+  * As a result, `font-size` becomes `fontSize`, and `background-color` becomes `backgroundColor`.
 
-####
+#### 12.3.3 Fetching computed styles
+* At any point in time, the computed style of an element is a combination of 
+  * all the built-in styles provided by the browser, 
+  * all the styles applied to it via style sheets, 
+  * the element’s style attribute, 
+  * and any manipulations of the style property by script. 
+* The standard method, implemented by all modern browsers, is the `getComputedStyle` method. 
+  * This method accepts an element whose styles are to be computed 
+  * and returns an interface through which property queries can be made. 
+  * The returned interface provides a method named `getPropertyValue` for retrieving the computed style of a specific style property.
+  ```
+  // Listing 12.8 Fetching computed style values
+  <style>
+    div {
+      background-color: #ffc;
+      display: inline;
+      font-size: 1.8em;
+      border: 1px solid crimson;
+      color: green;
+    }
+  </style>
+
+  <ul id="content"></ul>
+
+  <div style="color: crimson" id="testSubject" title="Ninja power!">
+    忍者パワー
+  </div>
+  <script>
+    function fetchComputedStyle(element, property) {
+      const computedStyles = getComputedStyle(element);
+      if (computedStyles) {
+        property = property.replace(/([A-Z])/g, "-$1").toLowerCase();
+        return computedStyles.getPropertyValue(property);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const div = document.querySelector("div");
+      report(
+        "background-color: " + fetchComputedStyle(div, "background-color")
+      );
+      report("display: " + fetchComputedStyle(div, "display"));
+      report("font-size: " + fetchComputedStyle(div, "fontSize"));
+      report("color: " + fetchComputedStyle(div, "color"));
+      report("border-top-color: " + fetchComputedStyle(div, "borderTopColor"));
+      report("border-top-width: " + fetchComputedStyle(div, "border-top-width"));
+    });
+  </script>
+  ```
 ######
 ######
 
