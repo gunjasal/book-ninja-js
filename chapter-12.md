@@ -275,7 +275,7 @@ function getNodes(htmlString, doc, fragment) {
       background-color: #ffc;
       display: inline;
       font-size: 1.8em;
-      border: 1px solid crimson;
+      border: 1px solid crimson; // `amalgam` properties
       color: green;
     }
   </style>
@@ -301,13 +301,33 @@ function getNodes(htmlString, doc, fragment) {
       report("display: " + fetchComputedStyle(div, "display"));
       report("font-size: " + fetchComputedStyle(div, "fontSize"));
       report("color: " + fetchComputedStyle(div, "color"));
-      report("border-top-color: " + fetchComputedStyle(div, "borderTopColor"));
-      report("border-top-width: " + fetchComputedStyle(div, "border-top-width"));
+      report("border-top-color: " + fetchComputedStyle(div, "borderTopColor")); // fetching `amalgam` property
+      report("border-top-width: " + fetchComputedStyle(div, "border-top-width")); // fetching `amalgam` property
     });
   </script>
   ```
-######
-######
+#### 12.3.4 Converting pixel values
+* An important point to consider when setting style values is the assignment of numeric values that represent pixels. 
+  * When setting a numeric value for a style property, we must specify the unit in order for it to work reliably across all browsers. 
+* Either of the following is a safe way to do this across browsers:
+```
+element.style.height = "10px"; 
+element.style.height = 10 + "px";
+```
+* The following isn’t safe across browsers:
+```
+element.style.height = 10;
+```
+* Some style properties take numeric values that don’t represent a pixel dimension. The list includes the following:
+```
+■ z-index
+■ font-weight 
+■ opacity
+■ zoom
+■ line-height
+```
+#### 12.3.5 Measuring heights and widths
+
 
 ##
 ####
