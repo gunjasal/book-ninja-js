@@ -327,11 +327,76 @@ element.style.height = 10;
 ■ line-height
 ```
 #### 12.3.5 Measuring heights and widths
+* Style properties such as height and width pose a special problem, because their val- ues default to auto when not specified, so that the element sizes itself according to its contents.
+  * As a result, we can’t use the height and width style properties to get accu- rate values unless explicit values are provided in the attribute string.
+  * Thankfully, the offsetHeight and offsetWidth properties provide just that: a fairly reliable means to access the height and width of an element. 
+  * But be aware that the values assigned to these two properties include the padding of the element.
+* when an element isn’t part of the display(with the display style being set to none), it has no dimensions. 
+  * Any attempt to fetch the offsetWidth or offsetHeight properties of a nondisplayed element will result in a value of 0.
+* For such hidden elements, if we want to obtain the nonhidden dimensions, we can employ a trick to momentarily unhide the element, grab the values, and hide it again.
+ 1. Change the `display` property to `block`. // allows us to grab the values of offsetHeight and offsetWidth
+ 2. Set `visibility` to `hidden`. // make the element invisible
+ 3. Set `position` to `absolute`. //  will leave a big hole where the element is positioned, take the element out of the normal display flow.
+ 4. Grab the dimension values. // 
+ 5. Restore the changed properties.
 
+## 12.4 Minimizing layout thrashing
+* Layout thrashing occurs when we perform a series of consec- utive reads and writes to DOM, in the process not allowing the browser to perform lay- out optimizations.
+* consider that changing attributes of one element (or mod- ifying its content) doesn’t necessarily affect only that element; instead it can cause a cascade of changes. 
+  * For example, setting the width of one element can lead to changes in the element’s children, siblings, and parents.
+* Because recalculating layout is expensive, browsers try to be as lazy as possible, by delaying working with the layout as much as they can; 
+  * they try to batch as many write operations as possible on the DOM in a queue so that these operations can be exe- cuted in one go.
+* But sometimes, the way we’ll write our code doesn’t give the browser enough room to perform these sorts of optimizations, and we force the browser to perform a lot of (possibly needless) recalculations. This is what layout thrashing is all about;
+* This action is expensive, in terms of performance.
+```
+// Listing 12.10 Consecutive series of reads and writes causes layout thrashing
+<div id="ninja">I’m a ninja</div>
+<div id="samurai">I’m a samurai</div>
+<div id="ronin">I’m a ronin</div>
+<script>
+  const ninja = document.getElementById("ninja");
+  const samurai = document.getElementById("samurai");
+  const ronin = document.getElementById("ronin");
 
-##
-####
-####
-####
-######
-######
+  const ninjaWidth = ninja.clientWidth;
+  ninja.style.width = ninjaWidth / 2 + "px";
+
+  const samuraiWidth = samurai.clientWidth;
+  samurai.style.width = samuraiWidth / 2 + "px";
+
+  const roninWidth = ronin.clientWidth;
+  ronin.style.width = roninWidth / 2 + "px";
+</script>
+```
+* Reading the value of the element’s `clientWidth` property is one of those actions that requires the browser to have an up-to-date layout.
+* By performing consecutive reads and writes to the width property of different elements, we don’t allow the browser to be lazy in a smart way. 
+```
+// Listing 12.11 Batch DOM reads and writes to avoid layout thrashing
+<div id="ninja">I’m a ninja</div>
+<div id="samurai">I’m a samurai</div>
+<div id="ronin">I’m a ronin</div>
+<script>
+  const ninja = document.getElementById("ninja");
+  const samurai = document.getElementById("samurai");
+  const ronin = document.getElementById("ronin");
+
+  // Batches all reads to layout properties together 
+  const ninjaWidth = ninja.clientWidth;
+  const samuraiWidth = samurai.clientWidth;
+  const roninWidth = ronin.clientWidth;
+
+  // Batches all writes to layout properties together
+  ninja.style.width = ninjaWidth / 2 + "px";
+  samurai.style.width = samuraiWidth / 2 + "px";
+  ronin.style.width = roninWidth / 2 + "px";
+</script>
+```
+* This allows the browser to lazily batch operations that modify the DOM.
+* For this reason, it’s always good to keep in mind the methods and properties that require an up-to-date layout, shown in the following table (obtained from http://ricostacruz.com/cheatsheets/layout-thrashing.html).
+```
+React’s virtual DOM
+
+One of the most popular client-side libraries is Facebook’s React (https:// facebook.github.io/react/). React achieves great performance by using a virtual DOM, a set of JavaScript objects that mimic the actual DOM.
+```
+
+#### 12.5 Summary
