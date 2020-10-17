@@ -207,7 +207,7 @@ function getNodes(htmlString, doc, fragment) {
   e.getAttribute('id') 
   e.id
   ```
-* But don’t let this fool you into thinking that the property and attribute are sharing the same value — they aren’t. We’ll see later in this chapter that the attribute and corresponding property, although linked, aren’t always identical.
+  * But don’t let this fool you into thinking that the property and attribute are sharing the same value — they aren’t. We’ll see later in this chapter that the attribute and corresponding property, although linked, aren’t always identical.
 * It’s important to note that not all attributes are represented by element properties.
 * If you’re not sure whether a property for an attribute exists, you can always test for it and fall back to the DOM methods if it doesn’t exist. Here’s an example:
   ```
