@@ -92,4 +92,11 @@
 * The standard set by the W3 Consortium
   1. Capturing phase — An event is first captured at the top element and trickled down to the target element.
   2. Bubbling phase — After the target element has been reached in the capturing phase, the event handling switches to bubbling, and the event bubbles up again from the target element to the top element.
-######
+#### 13.3.2 Custom events
+* Imagine a scenario in which you want to perform an action, but you want to trigger it under a variety of conditions from different pieces of code, perhaps even from code that’s in shared script files. A novice would repeat the code everywhere it’s needed. A journeyman would create a global function and call it from everywhere it’s needed. A ninja would use custom events. But why?
+###### LOOSE COUPLING
+* One of the advantages of event handlers is that we can establish as many as we want, and these handlers are completely independent of each other. So event handling is a good example of loose coupling.
+###### AN AJAX-Y EXAMPLE
+* ...
+###### CREATING CUSTOM EVENTS
+* ...
